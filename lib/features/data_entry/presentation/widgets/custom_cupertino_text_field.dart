@@ -8,18 +8,20 @@ class CustomCupertinoTextField extends StatelessWidget {
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.textInputAction = TextInputAction.next,
+    this.textCapitalization = TextCapitalization.words,
     this.minLines,
     this.maxLines,
-    required this.onSubmitted,
+    required this.onChanged,
   });
 
   final String placeholder;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
+  final TextCapitalization textCapitalization;
   final int? minLines;
   final int? maxLines;
-  final Function(String) onSubmitted;
+  final Function(String) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,12 @@ class CustomCupertinoTextField extends StatelessWidget {
       placeholderStyle: kHintTextStyle,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
+      textCapitalization: textCapitalization,
       minLines: minLines,
       maxLines: maxLines,
       style: kLabelTextStyle,
-      onTapOutside: (_) {
-        onSubmitted(controller.text);
-      },
-      onSubmitted: (_) {
-        onSubmitted(controller.text);
+      onChanged: (_) {
+        onChanged(controller.text);
       },
     );
   }

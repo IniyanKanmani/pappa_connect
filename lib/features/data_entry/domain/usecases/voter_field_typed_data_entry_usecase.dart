@@ -11,7 +11,5 @@ class VoterFieldTypedDataEntryUseCase extends UseCase {
     Map<String, dynamic> dataEntryData = params['data_entry_data'];
 
     dataEntryData['voters'][index][field] = value;
-
-    return dataEntryData;
   }
 }

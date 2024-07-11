@@ -2,20 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pappa_connect/core/components/custom_container.dart';
 import 'package:pappa_connect/core/constants/constants.dart';
+import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_cupertino_auto_text_field.dart';
 import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_cupertino_text_field.dart';
 
 class CustomAddressEntryWidget extends StatelessWidget {
   const CustomAddressEntryWidget({
     super.key,
-    required this.onFieldChanged,
-    required this.addressData,
+    required this.onAddressEntryTypeChange,
+    required this.onPostcodeSearch,
+    required this.onAddressSelected,
+    required this.onChanged,
+    required this.dataEntryData,
   });
 
-  final Function(String, String) onFieldChanged;
-  final Map<String, dynamic> addressData;
+  final Function(String) onAddressEntryTypeChange;
+  final Function(String) onPostcodeSearch;
+  final Function(String) onAddressSelected;
+  final Function(String, String) onChanged;
+  final Map<String, dynamic> dataEntryData;
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> addressData = dataEntryData["address"];
+
     return CustomContainer(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -30,7 +39,9 @@ class CustomAddressEntryWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CupertinoButton(
-                onPressed: () {},
+                onPressed: () {
+                  onAddressEntryTypeChange("location");
+                },
                 child: const Text(
                   "Location",
                   style: TextStyle(
@@ -39,7 +50,11 @@ class CustomAddressEntryWidget extends StatelessWidget {
                 ),
               ),
               CupertinoButton(
-                onPressed: () {},
+                onPressed: dataEntryData["is_website_loaded"]
+                    ? () {
+                        onAddressEntryTypeChange("postcode");
+                      }
+                    : null,
                 child: const Text(
                   "Postcode",
                   style: TextStyle(
@@ -54,14 +69,28 @@ class CustomAddressEntryWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (dataEntryData["address_entry_type"] == 'postcode')
+                  CustomCupertinoAutoTextField(
+                    placeholder: 'Search',
+                    initialValue: dataEntryData["postcode_search"],
+                    keyboardType: TextInputType.streetAddress,
+                    textInputAction: TextInputAction.done,
+                    dataEntryData: dataEntryData,
+                    onAddressSelected: onAddressSelected,
+                    onChanged: onPostcodeSearch,
+                  ),
+                if (dataEntryData["address_entry_type"] == 'postcode')
+                  const SizedBox(
+                    height: 15.0,
+                  ),
                 CustomCupertinoTextField(
                   placeholder: 'Address line 1',
                   controller:
                       TextEditingController(text: addressData['line-1']),
                   keyboardType: TextInputType.streetAddress,
                   textInputAction: TextInputAction.next,
-                  onSubmitted: (value) {
-                    onFieldChanged('line-1', value);
+                  onChanged: (value) {
+                    onChanged('line-1', value);
                   },
                 ),
                 const SizedBox(
@@ -73,8 +102,8 @@ class CustomAddressEntryWidget extends StatelessWidget {
                       TextEditingController(text: addressData['line-2']),
                   keyboardType: TextInputType.streetAddress,
                   textInputAction: TextInputAction.next,
-                  onSubmitted: (value) {
-                    onFieldChanged('line-2', value);
+                  onChanged: (value) {
+                    onChanged('line-2', value);
                   },
                 ),
                 const SizedBox(
@@ -83,8 +112,8 @@ class CustomAddressEntryWidget extends StatelessWidget {
                 CustomCupertinoTextField(
                   placeholder: 'City/Town',
                   controller: TextEditingController(text: addressData['city']),
-                  onSubmitted: (value) {
-                    onFieldChanged('city', value);
+                  onChanged: (value) {
+                    onChanged('city', value);
                   },
                 ),
                 const SizedBox(
@@ -94,8 +123,8 @@ class CustomAddressEntryWidget extends StatelessWidget {
                   placeholder: 'County',
                   controller:
                       TextEditingController(text: addressData['county']),
-                  onSubmitted: (value) {
-                    onFieldChanged('county', value);
+                  onChanged: (value) {
+                    onChanged('county', value);
                   },
                 ),
                 const SizedBox(
@@ -105,8 +134,9 @@ class CustomAddressEntryWidget extends StatelessWidget {
                   placeholder: 'Postcode',
                   controller:
                       TextEditingController(text: addressData['postcode']),
-                  onSubmitted: (value) {
-                    onFieldChanged('postcode', value);
+                  textCapitalization: TextCapitalization.characters,
+                  onChanged: (value) async {
+                    onChanged('postcode', value);
                   },
                 ),
               ],

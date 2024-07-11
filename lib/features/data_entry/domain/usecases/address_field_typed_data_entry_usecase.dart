@@ -10,7 +10,5 @@ class AddressFieldTypedDataEntryUseCase extends UseCase {
     Map<String, dynamic> dataEntryData = params['data_entry_data'];
 
     dataEntryData['address'][field] = value;
-
-    return dataEntryData;
   }
 }

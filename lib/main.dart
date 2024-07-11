@@ -22,7 +22,7 @@ class PappaConnectApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      title: 'Flutter Demo',
+      title: 'Pappa Connect',
       debugShowCheckedModeBanner: false,
       theme: const CupertinoThemeData(
         primaryColor: CupertinoColors.activeBlue,

@@ -7,11 +7,39 @@ import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_ad
 import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_address_entry_widget.dart';
 import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_voter_entry_widget.dart';
 import 'package:pappa_connect/injection_container.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-class DataEntryView extends StatelessWidget {
-  DataEntryView({super.key});
+class DataEntryView extends StatefulWidget {
+  const DataEntryView({super.key});
 
+  @override
+  State<DataEntryView> createState() => _DataEntryViewState();
+}
+
+class _DataEntryViewState extends State<DataEntryView> {
   final DataEntryBloc _dataEntryBloc = sl.get<DataEntryBloc>();
+
+  late WebViewController webViewController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse("https://ideal-postcodes.co.uk/address-finder"))
+      ..addJavaScriptChannel("FlutterChannel",
+          onMessageReceived: (JavaScriptMessage message) {
+        _dataEntryBloc.add(NewScrapedDataEvent(newData: message.message));
+      })
+      ..setNavigationDelegate(NavigationDelegate(onPageFinished: (_) {
+        _dataEntryBloc.add(const WebsiteLoadedEvent());
+      }));
+  }
+
+  Future<void> scrapeAddress(String jsCode) async {
+    await webViewController.runJavaScript(jsCode);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,20 +140,56 @@ class DataEntryView extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
             return CustomAddressEntryWidget(
-              onFieldChanged: (field, value) {
+              dataEntryData: dataEntryData,
+              onAddressEntryTypeChange: (type) {
+                _dataEntryBloc.add(ChangeAddressEntryTypeEvent(
+                  type: type,
+                ));
+              },
+              onPostcodeSearch: (value) {
+                _dataEntryBloc.add(PostcodeSearchEvent(
+                  value: value,
+                  scrapeAddress: scrapeAddress,
+                ));
+              },
+              onAddressSelected: (address) {
+                _dataEntryBloc.add(AddressSelectedEvent(
+                  address: address,
+                ));
+              },
+              onChanged: (field, value) {
                 _dataEntryBloc.add(AddressFieldTypedEvent(
                   field: field,
                   value: value,
-                  dataEntryData: dataEntryData,
                 ));
               },
-              addressData: dataEntryData['address'],
             );
           } else if (index == dataEntryData['voters'].length + 2 - 1) {
-            return const CustomAddNewVoterWidget();
+            return CustomAddNewVoterWidget(
+              addVoter: () {
+                _dataEntryBloc.add(const AddVoterEvent());
+              },
+            );
           }
 
-          return const CustomVoterEntryWidget();
+          return CustomVoterEntryWidget(
+            index: index - 1,
+            onChanged: (field, value) {
+              _dataEntryBloc.add(VoterFieldTypedEvent(
+                index: index - 1,
+                field: field,
+                value: value,
+              ));
+            },
+            onOptionSelected: (field, value) {
+              _dataEntryBloc.add(VoterFieldOptionSelectedEvent(
+                index: index - 1,
+                field: field,
+                value: value,
+              ));
+            },
+            voterData: dataEntryData['voters'][index - 1],
+          );
         },
       ),
     );

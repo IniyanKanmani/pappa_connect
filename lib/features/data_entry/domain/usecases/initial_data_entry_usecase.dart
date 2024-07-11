@@ -7,7 +7,12 @@ class InitialDataEntryUseCase extends UseCase {
   Future call({params}) async {
     Map<String, dynamic> dataEntryData = {};
 
+    dataEntryData['is_website_loaded'] = false;
     dataEntryData['address_entry_type'] = 'manual';
+    dataEntryData['postcode_search'] = '';
+    dataEntryData['postcode_search_edited'] = false;
+    dataEntryData['addresses'] = [];
+
     dataEntryData['address'] = {
       'line-1': '',
       'line-2': '',
@@ -22,27 +27,13 @@ class InitialDataEntryUseCase extends UseCase {
         'lastname': '',
         'email': '',
         'contact_no': '',
-        'registered_to_vote': '',
-        'vote_type': '',
-        'party_member': '',
-        'voter_intent': '',
-        'council_vote': '',
-        'county_vote': '',
-        'country_vote': '',
-        'comments': '',
-      },
-      {
-        'firstname': '',
-        'lastname': '',
-        'email': '',
-        'contact_no': '',
-        'registered_to_vote': '',
-        'vote_type': '',
-        'party_member': '',
-        'voter_intent': '',
-        'council_vote': '',
-        'county_vote': '',
-        'country_vote': '',
+        'registered_to_vote': null,
+        'vote_type': null,
+        'party_member': null,
+        'voter_intent': null,
+        'council_vote': null,
+        'county_vote': null,
+        'country_vote': null,
         'comments': '',
       },
     ];

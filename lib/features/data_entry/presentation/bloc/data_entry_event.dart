@@ -11,16 +11,52 @@ class LoadedEvent extends DataEntryEvent {
   const LoadedEvent();
 }
 
+class WebsiteLoadedEvent extends DataEntryEvent {
+  const WebsiteLoadedEvent();
+}
+
+class ChangeAddressEntryTypeEvent extends DataEntryEvent {
+  const ChangeAddressEntryTypeEvent({
+    required this.type,
+  });
+
+  final String type;
+}
+
+class PostcodeSearchEvent extends DataEntryEvent {
+  const PostcodeSearchEvent({
+    required this.value,
+    required this.scrapeAddress,
+  });
+
+  final String value;
+  final Function(String) scrapeAddress;
+}
+
+class NewScrapedDataEvent extends DataEntryEvent {
+  const NewScrapedDataEvent({
+    required this.newData,
+  });
+
+  final String newData;
+}
+
+class AddressSelectedEvent extends DataEntryEvent {
+  const AddressSelectedEvent({
+    required this.address,
+  });
+
+  final String address;
+}
+
 class AddressFieldTypedEvent extends DataEntryEvent {
   const AddressFieldTypedEvent({
     required this.field,
     required this.value,
-    required this.dataEntryData,
   });
 
   final String field;
   final String value;
-  final Map<String, dynamic> dataEntryData;
 }
 
 class VoterFieldTypedEvent extends DataEntryEvent {
@@ -28,11 +64,25 @@ class VoterFieldTypedEvent extends DataEntryEvent {
     required this.index,
     required this.field,
     required this.value,
-    required this.dataEntryData,
   });
 
   final int index;
   final String field;
   final String value;
-  final Map<String, dynamic> dataEntryData;
+}
+
+class VoterFieldOptionSelectedEvent extends DataEntryEvent {
+  const VoterFieldOptionSelectedEvent({
+    required this.index,
+    required this.field,
+    required this.value,
+  });
+
+  final int index;
+  final String field;
+  final String? value;
+}
+
+class AddVoterEvent extends DataEntryEvent {
+  const AddVoterEvent();
 }

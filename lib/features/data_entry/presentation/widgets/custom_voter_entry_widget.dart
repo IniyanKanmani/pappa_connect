@@ -1,23 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:pappa_connect/core/components/custom_container.dart';
 import 'package:pappa_connect/core/constants/constants.dart';
+import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_cupertino_text_field.dart';
 
 class CustomVoterEntryWidget extends StatelessWidget {
   const CustomVoterEntryWidget({
     super.key,
+    required this.index,
+    required this.onChanged,
+    required this.onOptionSelected,
+    required this.voterData,
   });
+
+  final int index;
+  final Function(String, String) onChanged;
+  final Function(String, String?) onOptionSelected;
+  final Map<String, dynamic> voterData;
 
   @override
   Widget build(BuildContext context) {
     return CustomContainer(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Voter 1',
+            'Voter ${index + 1}',
             style: kLabelTextStyle,
           ),
           const Divider(),
@@ -26,42 +35,50 @@ class CustomVoterEntryWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CupertinoTextField(
+                CustomCupertinoTextField(
                   placeholder: 'First Name',
-                  placeholderStyle: kHintTextStyle,
+                  controller:
+                      TextEditingController(text: voterData['firstname']),
                   keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  style: kLabelTextStyle,
+                  onChanged: (value) {
+                    onChanged('firstname', value);
+                  },
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                CupertinoTextField(
+                CustomCupertinoTextField(
                   placeholder: 'Last Name',
-                  placeholderStyle: kHintTextStyle,
+                  controller:
+                      TextEditingController(text: voterData['lastname']),
                   keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  style: kLabelTextStyle,
+                  onChanged: (value) {
+                    onChanged('lastname', value);
+                  },
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                CupertinoTextField(
+                CustomCupertinoTextField(
                   placeholder: 'Email',
-                  placeholderStyle: kHintTextStyle,
+                  controller: TextEditingController(text: voterData['email']),
                   keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  style: kLabelTextStyle,
+                  textCapitalization: TextCapitalization.none,
+                  onChanged: (value) {
+                    onChanged('email', value);
+                  },
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                CupertinoTextField(
+                CustomCupertinoTextField(
                   placeholder: 'Contact No',
-                  placeholderStyle: kHintTextStyle,
+                  controller:
+                      TextEditingController(text: voterData['contact_no']),
                   keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  style: kLabelTextStyle,
+                  onChanged: (value) {
+                    onChanged('contact_no', value);
+                  },
                 ),
                 const Divider(),
                 Row(
@@ -75,8 +92,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
-                          value: 'No',
+                        child: MacosPopupButton<String?>(
+                          value: voterData['registered_to_vote'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Yes',
@@ -91,7 +108,9 @@ class CustomVoterEntryWidget extends StatelessWidget {
                                         ),
                                       ))
                               .toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("registered_to_vote", value);
+                          },
                         ),
                       ),
                     ),
@@ -111,7 +130,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
+                        child: MacosPopupButton<String?>(
+                          value: voterData['vote_type'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Postal',
@@ -125,7 +145,9 @@ class CustomVoterEntryWidget extends StatelessWidget {
                               ),
                             );
                           }).toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("vote_type", value);
+                          },
                         ),
                       ),
                     ),
@@ -143,7 +165,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
+                        child: MacosPopupButton<String?>(
+                          value: voterData['party_member'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Labour',
@@ -161,7 +184,9 @@ class CustomVoterEntryWidget extends StatelessWidget {
                               ),
                             );
                           }).toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("party_member", value);
+                          },
                         ),
                       ),
                     ),
@@ -181,7 +206,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
+                        child: MacosPopupButton<String?>(
+                          value: voterData['voter_intent'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Labour',
@@ -199,7 +225,9 @@ class CustomVoterEntryWidget extends StatelessWidget {
                               ),
                             );
                           }).toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("voter_intent", value);
+                          },
                         ),
                       ),
                     ),
@@ -219,7 +247,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
+                        child: MacosPopupButton<String?>(
+                          value: voterData['council_vote'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Labour',
@@ -237,7 +266,9 @@ class CustomVoterEntryWidget extends StatelessWidget {
                               ),
                             );
                           }).toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("council_vote", value);
+                          },
                         ),
                       ),
                     ),
@@ -257,7 +288,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
+                        child: MacosPopupButton<String?>(
+                          value: voterData['county_vote'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Labour',
@@ -275,7 +307,9 @@ class CustomVoterEntryWidget extends StatelessWidget {
                               ),
                             );
                           }).toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("county_vote", value);
+                          },
                         ),
                       ),
                     ),
@@ -295,7 +329,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: 34.0,
-                        child: MacosPopupButton(
+                        child: MacosPopupButton<String?>(
+                          value: voterData['country_vote'],
                           style: kLabelTextStyle,
                           items: <String>[
                             'Labour',
@@ -313,21 +348,26 @@ class CustomVoterEntryWidget extends StatelessWidget {
                               ),
                             );
                           }).toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            onOptionSelected("country_vote", value);
+                          },
                         ),
                       ),
                     ),
                   ],
                 ),
                 const Divider(),
-                CupertinoTextField(
+                CustomCupertinoTextField(
                   placeholder: 'Comments',
-                  placeholderStyle: kHintTextStyle,
+                  controller:
+                      TextEditingController(text: voterData['comments']),
                   keyboardType: TextInputType.multiline,
                   textInputAction: TextInputAction.newline,
                   minLines: 1,
                   maxLines: 5,
-                  style: kLabelTextStyle,
+                  onChanged: (value) {
+                    onChanged('comments', value);
+                  },
                 ),
               ],
             ),
