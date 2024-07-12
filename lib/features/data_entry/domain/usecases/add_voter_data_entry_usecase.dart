@@ -19,6 +19,9 @@ class AddVoterDataEntryUseCase extends UseCase {
       'council_vote': null,
       'county_vote': null,
       'country_vote': null,
+      'member': null,
+      'volunteer': null,
+      'advertise': null,
       'comments': '',
     });
   }

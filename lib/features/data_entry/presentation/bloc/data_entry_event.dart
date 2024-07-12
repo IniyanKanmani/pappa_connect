@@ -86,3 +86,17 @@ class VoterFieldOptionSelectedEvent extends DataEntryEvent {
 class AddVoterEvent extends DataEntryEvent {
   const AddVoterEvent();
 }
+
+class RemoveVoterEvent extends DataEntryEvent {
+  const RemoveVoterEvent({required this.index});
+
+  final int index;
+}
+
+class ClearDataEvent extends DataEntryEvent {
+  const ClearDataEvent();
+}
+
+class SaveDataEvent extends DataEntryEvent {
+  const SaveDataEvent();
+}

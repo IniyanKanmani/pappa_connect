@@ -103,7 +103,7 @@ class HomeView extends StatelessWidget {
       ),
       tabBuilder: (BuildContext context, int index) {
         return [
-          DataEntryView(),
+          const DataEntryView(),
           Container(),
           Container(),
         ].elementAt(index);

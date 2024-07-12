@@ -30,12 +30,13 @@ class CustomCupertinoAutoTextField extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
       return Autocomplete<String>(
         optionsBuilder: (_) async {
+          await Future.delayed(const Duration(milliseconds: 100));
           if (dataEntryData['postcode_search_edited'] &&
               dataEntryData["postcode_search"].length > 4) {
-            await Future.delayed(const Duration(milliseconds: 100));
             return dataEntryData["addresses"].cast<String>();
+          } else {
+            return [];
           }
-          return [];
         },
         optionsViewBuilder: (BuildContext context,
             void Function(String) onSelected, Iterable<String> options) {
@@ -60,6 +61,7 @@ class CustomCupertinoAutoTextField extends StatelessWidget {
                     return GestureDetector(
                       onTap: () {
                         String address = options.elementAt(index);
+                        onSelected(dataEntryData["postcode_search"]);
                         onAddressSelected(address);
                       },
                       child: Padding(

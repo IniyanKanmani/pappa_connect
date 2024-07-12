@@ -1,38 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:macos_ui/macos_ui.dart';
 import 'package:pappa_connect/core/components/custom_container.dart';
 import 'package:pappa_connect/core/constants/constants.dart';
 import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_cupertino_text_field.dart';
+import 'package:pappa_connect/features/data_entry/presentation/widgets/custom_macos_popop_button.dart';
 
 class CustomVoterEntryWidget extends StatelessWidget {
   const CustomVoterEntryWidget({
     super.key,
     required this.index,
+    required this.canRemoveVoter,
     required this.onChanged,
     required this.onOptionSelected,
-    required this.voterData,
+    required this.onRemoveVoter,
+    required this.dataEntryData,
   });
 
   final int index;
+  final bool canRemoveVoter;
   final Function(String, String) onChanged;
   final Function(String, String?) onOptionSelected;
-  final Map<String, dynamic> voterData;
+  final Function() onRemoveVoter;
+  final Map<String, dynamic> dataEntryData;
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> voterData = dataEntryData["voters"][index];
+
     return CustomContainer(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Voter ${index + 1}',
-            style: kLabelTextStyle,
-          ),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Voter ${index + 1}',
+                    style: kLabelTextStyle,
+                  ),
+                ),
+                if (canRemoveVoter)
+                  GestureDetector(
+                    onTap: onRemoveVoter,
+                    child: Icon(
+                      Icons.remove_rounded,
+                      color: kClearTextColor,
+                    ),
+                  ),
+              ],
+            ),
+            const Divider(),
+            Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CustomCupertinoTextField(
@@ -81,280 +101,98 @@ class CustomVoterEntryWidget extends StatelessWidget {
                   },
                 ),
                 const Divider(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Registered to Vote',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['registered_to_vote'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Yes',
-                            'No',
-                          ]
-                              .map<MacosPopupMenuItem<String>>(
-                                  (value) => MacosPopupMenuItem<String>(
-                                        value: value,
-                                        child: Text(
-                                          value,
-                                          style: kLabelTextStyle,
-                                        ),
-                                      ))
-                              .toList(),
-                          onChanged: (value) {
-                            onOptionSelected("registered_to_vote", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "Registered to Vote",
+                  name: "registered_to_vote",
+                  items: dataEntryData['bool'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Vote Type',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['vote_type'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Postal',
-                            'In Person',
-                          ].map<MacosPopupMenuItem<String>>((String value) {
-                            return MacosPopupMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: kLabelTextStyle,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            onOptionSelected("vote_type", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "Vote Type",
+                  name: "vote_type",
+                  items: dataEntryData['vote_types'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const Divider(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Party Member',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['party_member'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Labour',
-                            'Conservatives',
-                            'Liberal Democrats',
-                            'Green',
-                            'Reform UK',
-                            'Other',
-                          ].map<MacosPopupMenuItem<String>>((String value) {
-                            return MacosPopupMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: kLabelTextStyle,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            onOptionSelected("party_member", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "Party Member",
+                  name: "party_member",
+                  items: dataEntryData['parties'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Voter Intent',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['voter_intent'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Labour',
-                            'Conservatives',
-                            'Liberal Democrats',
-                            'Green',
-                            'Reform UK',
-                            'Other',
-                          ].map<MacosPopupMenuItem<String>>((String value) {
-                            return MacosPopupMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: kLabelTextStyle,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            onOptionSelected("voter_intent", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "Voter Intent",
+                  name: "voter_intent",
+                  items: dataEntryData['parties'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Council Vote',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['council_vote'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Labour',
-                            'Conservatives',
-                            'Liberal Democrats',
-                            'Green',
-                            'Reform UK',
-                            'Other',
-                          ].map<MacosPopupMenuItem<String>>((String value) {
-                            return MacosPopupMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: kLabelTextStyle,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            onOptionSelected("council_vote", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "Council Vote",
+                  name: "council_vote",
+                  items: dataEntryData['parties'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'County Vote',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['county_vote'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Labour',
-                            'Conservatives',
-                            'Liberal Democrats',
-                            'Green',
-                            'Reform UK',
-                            'Other',
-                          ].map<MacosPopupMenuItem<String>>((String value) {
-                            return MacosPopupMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: kLabelTextStyle,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            onOptionSelected("county_vote", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "County Vote",
+                  name: "county_vote",
+                  items: dataEntryData['parties'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const SizedBox(
                   height: 5.0,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Country Vote',
-                        style: kLabelTextStyle,
-                      ),
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 34.0,
-                        child: MacosPopupButton<String?>(
-                          value: voterData['country_vote'],
-                          style: kLabelTextStyle,
-                          items: <String>[
-                            'Labour',
-                            'Conservatives',
-                            'Liberal Democrats',
-                            'Green',
-                            'Reform UK',
-                            'Other',
-                          ].map<MacosPopupMenuItem<String>>((String value) {
-                            return MacosPopupMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value,
-                                style: kLabelTextStyle,
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            onOptionSelected("country_vote", value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                CustomMacosPopupButton(
+                  title: "Country Vote",
+                  name: "country_vote",
+                  items: dataEntryData['parties'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
+                ),
+                const Divider(),
+                CustomMacosPopupButton(
+                  title: "Will to be Member",
+                  name: "member",
+                  items: dataEntryData['bool'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                CustomMacosPopupButton(
+                  title: "Will to be Volunteer",
+                  name: "volunteer",
+                  items: dataEntryData['bool'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                CustomMacosPopupButton(
+                  title: "Happy to Advertise",
+                  name: "advertise",
+                  items: dataEntryData['bool'],
+                  voterData: voterData,
+                  onOptionSelected: onOptionSelected,
                 ),
                 const Divider(),
                 CustomCupertinoTextField(
@@ -371,8 +209,8 @@ class CustomVoterEntryWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

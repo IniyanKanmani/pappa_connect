@@ -10,6 +10,8 @@ import 'package:pappa_connect/features/data_entry/domain/usecases/change_address
 import 'package:pappa_connect/features/data_entry/domain/usecases/initial_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/new_scrapped_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/postcode_search_field_typed_data_entry_usecase.dart';
+import 'package:pappa_connect/features/data_entry/domain/usecases/remove_voter_data_entry_usecase.dart';
+import 'package:pappa_connect/features/data_entry/domain/usecases/save_voter_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/voter_field_typed_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/website_loaded_data_entry_usecase.dart';
 
@@ -28,6 +30,8 @@ class DataEntryBloc extends Bloc<DataEntryEvent, DataEntryState> {
   final AddressFieldTypedDataEntryUseCase _addressFieldTypedDataEntryUseCase;
   final VoterFieldTypedDataEntryUseCase _voterFieldTypedDataEntryUseCase;
   final AddVoterDataEntryUseCase _addVoterDataEntryUseCase;
+  final RemoveVoterDataEntryUseCase _removeVoterDataEntryUseCase;
+  final SaveVoterDataEntryUseCase _saveVoterDataEntryUseCase;
 
   late Map<String, dynamic> dataEntryData;
 
@@ -41,6 +45,8 @@ class DataEntryBloc extends Bloc<DataEntryEvent, DataEntryState> {
     this._addressFieldTypedDataEntryUseCase,
     this._voterFieldTypedDataEntryUseCase,
     this._addVoterDataEntryUseCase,
+    this._removeVoterDataEntryUseCase,
+    this._saveVoterDataEntryUseCase,
   ) : super(LoadingState()) {
     on<LoadedEvent>(loadedEvent);
     on<WebsiteLoadedEvent>(websiteLoadedEvent);
@@ -52,6 +58,9 @@ class DataEntryBloc extends Bloc<DataEntryEvent, DataEntryState> {
     on<VoterFieldTypedEvent>(voterFieldTypedEvent);
     on<VoterFieldOptionSelectedEvent>(voterFieldOptionSelectedEvent);
     on<AddVoterEvent>(addVoterEvent);
+    on<RemoveVoterEvent>(removeVoterEvent);
+    on<ClearDataEvent>(clearDataEvent);
+    on<SaveDataEvent>(saveDataEvent);
   }
 
   FutureOr<void> loadedEvent(
@@ -147,6 +156,30 @@ class DataEntryBloc extends Bloc<DataEntryEvent, DataEntryState> {
     await _addVoterDataEntryUseCase(params: {
       'data_entry_data': dataEntryData,
     });
+    emit(LoadedState(dataEntryData: dataEntryData));
+  }
+
+  FutureOr<void> removeVoterEvent(
+      RemoveVoterEvent event, Emitter<DataEntryState> emit) async {
+    await _removeVoterDataEntryUseCase(params: {
+      'index': event.index,
+      'data_entry_data': dataEntryData,
+    });
+    emit(LoadedState(dataEntryData: dataEntryData));
+  }
+
+  FutureOr<void> clearDataEvent(
+      ClearDataEvent event, Emitter<DataEntryState> emit) async {
+    bool isWebsiteLoaded = dataEntryData['is_website_loaded'];
+    dataEntryData = await _initialDataEntryUseCase();
+    dataEntryData['is_website_loaded'] = isWebsiteLoaded;
+    emit(LoadedState(dataEntryData: dataEntryData));
+  }
+
+  FutureOr<void> saveDataEvent(
+      SaveDataEvent event, Emitter<DataEntryState> emit) async {
+    await _saveVoterDataEntryUseCase();
+    dataEntryData = await _initialDataEntryUseCase();
     emit(LoadedState(dataEntryData: dataEntryData));
   }
 }

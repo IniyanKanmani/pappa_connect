@@ -113,17 +113,21 @@ class _DataEntryViewState extends State<DataEntryView> {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         leading: CupertinoButton(
-          onPressed: () {},
+          onPressed: () {
+            _dataEntryBloc.add(const ClearDataEvent());
+          },
           padding: EdgeInsets.zero,
           child: Text(
-            "Cancel",
+            "Clear",
             style: TextStyle(
-              color: kCancelTextColor,
+              color: kClearTextColor,
             ),
           ),
         ),
         trailing: CupertinoButton(
-          onPressed: () {},
+          onPressed: () {
+            _dataEntryBloc.add(const SaveDataEvent());
+          },
           padding: EdgeInsets.zero,
           child: Text(
             "Save",
@@ -174,6 +178,7 @@ class _DataEntryViewState extends State<DataEntryView> {
 
           return CustomVoterEntryWidget(
             index: index - 1,
+            canRemoveVoter: dataEntryData['voters'].length != 1 ? true : false,
             onChanged: (field, value) {
               _dataEntryBloc.add(VoterFieldTypedEvent(
                 index: index - 1,
@@ -188,7 +193,12 @@ class _DataEntryViewState extends State<DataEntryView> {
                 value: value,
               ));
             },
-            voterData: dataEntryData['voters'][index - 1],
+            onRemoveVoter: () {
+              _dataEntryBloc.add(RemoveVoterEvent(
+                index: index - 1,
+              ));
+            },
+            dataEntryData: dataEntryData,
           );
         },
       ),

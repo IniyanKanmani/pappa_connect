@@ -26,47 +26,49 @@ class CustomAddressEntryWidget extends StatelessWidget {
     Map<String, dynamic> addressData = dataEntryData["address"];
 
     return CustomContainer(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Address',
-            style: kLabelTextStyle,
-          ),
-          const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CupertinoButton(
-                onPressed: () {
-                  onAddressEntryTypeChange("location");
-                },
-                child: const Text(
-                  "Location",
-                  style: TextStyle(
-                    fontSize: 15,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Address',
+                style: kLabelTextStyle,
+              ),
+            ),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CupertinoButton(
+                  onPressed: () {
+                    onAddressEntryTypeChange("location");
+                  },
+                  child: const Text(
+                    "Location",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
                 ),
-              ),
-              CupertinoButton(
-                onPressed: dataEntryData["is_website_loaded"]
-                    ? () {
-                        onAddressEntryTypeChange("postcode");
-                      }
-                    : null,
-                child: const Text(
-                  "Postcode",
-                  style: TextStyle(
-                    fontSize: 15,
+                CupertinoButton(
+                  onPressed: dataEntryData["is_website_loaded"]
+                      ? () {
+                          onAddressEntryTypeChange("postcode");
+                        }
+                      : null,
+                  child: const Text(
+                    "Postcode",
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
+              ],
+            ),
+            Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (dataEntryData["address_entry_type"] == 'postcode')
@@ -86,11 +88,11 @@ class CustomAddressEntryWidget extends StatelessWidget {
                 CustomCupertinoTextField(
                   placeholder: 'Address line 1',
                   controller:
-                      TextEditingController(text: addressData['line-1']),
+                      TextEditingController(text: addressData['street']),
                   keyboardType: TextInputType.streetAddress,
                   textInputAction: TextInputAction.next,
                   onChanged: (value) {
-                    onChanged('line-1', value);
+                    onChanged('street', value);
                   },
                 ),
                 const SizedBox(
@@ -98,12 +100,11 @@ class CustomAddressEntryWidget extends StatelessWidget {
                 ),
                 CustomCupertinoTextField(
                   placeholder: 'Address line 2',
-                  controller:
-                      TextEditingController(text: addressData['line-2']),
+                  controller: TextEditingController(text: addressData['flat']),
                   keyboardType: TextInputType.streetAddress,
                   textInputAction: TextInputAction.next,
                   onChanged: (value) {
-                    onChanged('line-2', value);
+                    onChanged('flat', value);
                   },
                 ),
                 const SizedBox(
@@ -141,8 +142,8 @@ class CustomAddressEntryWidget extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

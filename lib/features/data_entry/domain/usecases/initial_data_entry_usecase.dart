@@ -13,9 +13,28 @@ class InitialDataEntryUseCase extends UseCase {
     dataEntryData['postcode_search_edited'] = false;
     dataEntryData['addresses'] = [];
 
+    dataEntryData['parties'] = [
+      'Labour',
+      'Conservatives',
+      'Liberal Democrats',
+      'Green',
+      'Reform UK',
+      'Other',
+    ];
+
+    dataEntryData['bool'] = [
+      'Yes',
+      'No',
+    ];
+
+    dataEntryData['vote_types'] = [
+      'In Person',
+      'Postal',
+    ];
+
     dataEntryData['address'] = {
-      'line-1': '',
-      'line-2': '',
+      'street': '',
+      'flat': '',
       'city': '',
       'county': '',
       'postcode': '',
@@ -34,6 +53,9 @@ class InitialDataEntryUseCase extends UseCase {
         'council_vote': null,
         'county_vote': null,
         'country_vote': null,
+        'member': null,
+        'volunteer': null,
+        'advertise': null,
         'comments': '',
       },
     ];

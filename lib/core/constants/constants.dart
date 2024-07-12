@@ -7,7 +7,7 @@ Color kTertiaryBackgroundColor = Colors.white;
 Color kSelectedItemColor = const Color(0xFF0265DC);
 Color kUnSelectedItemColor = const Color(0xFF6D6D6D);
 Color kSaveTextColor = const Color(0xFF0F80FF);
-Color kCancelTextColor = const Color(0xFFFF473C);
+Color kClearTextColor = const Color(0xFFFF473C);
 Color kHintTextColor = const Color(0xFFC4C4C6);
 Color kCheckboxCheckedColor = const Color(0xFF9A3DF1);
 Color kCursorColor = const Color(0xFF333333);
@@ -22,7 +22,10 @@ Color kFailForegroundColor = const Color(0xFF981F48);
 
 TextStyle kLabelTextStyle = GoogleFonts.poppins(
   textStyle: const TextStyle(
-      fontSize: 15.0, fontWeight: FontWeight.w500, color: Colors.black,),
+    fontSize: 15.0,
+    fontWeight: FontWeight.w500,
+    color: Colors.black,
+  ),
 );
 
 TextStyle kHintTextStyle = GoogleFonts.poppins(
@@ -45,11 +48,11 @@ TextStyle kCancelButtonTextStyle = GoogleFonts.poppins(
   textStyle: TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.w600,
-    color: kCancelTextColor,
+    color: kClearTextColor,
   ),
 );
 
-BorderRadius kBorderRadius = BorderRadius.circular(10.0);
+BorderRadius kBorderRadius = BorderRadius.circular(5.0);
 List<BoxShadow> kBoxShadowList = [
   BoxShadow(
     color: Colors.grey.withOpacity(0.2),

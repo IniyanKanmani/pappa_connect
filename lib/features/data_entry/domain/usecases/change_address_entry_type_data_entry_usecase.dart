@@ -33,8 +33,8 @@ class ChangeAddressEntryTypeDataEntryUseCase extends UseCase {
 
         Placemark place = placemarks[0];
 
-        dataEntryData['address']['line-1'] = place.street ?? "";
-        dataEntryData['address']['line-2'] = '';
+        dataEntryData['address']['street'] = place.street ?? "";
+        dataEntryData['address']['flat'] = '';
         dataEntryData['address']['city'] = place.locality ?? "";
         dataEntryData['address']['county'] = place.subAdministrativeArea ?? "";
         dataEntryData['address']['postcode'] =

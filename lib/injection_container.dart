@@ -1,6 +1,4 @@
 import 'package:get_it/get_it.dart';
-import 'package:pappa_connect/features/data_entry/data/repositories/data_entry_repository_implementation.dart';
-import 'package:pappa_connect/features/data_entry/domain/repositories/data_entry_repository.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/add_voter_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/address_field_typed_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/address_selected_data_entry_usecase.dart';
@@ -8,6 +6,8 @@ import 'package:pappa_connect/features/data_entry/domain/usecases/change_address
 import 'package:pappa_connect/features/data_entry/domain/usecases/initial_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/new_scrapped_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/postcode_search_field_typed_data_entry_usecase.dart';
+import 'package:pappa_connect/features/data_entry/domain/usecases/remove_voter_data_entry_usecase.dart';
+import 'package:pappa_connect/features/data_entry/domain/usecases/save_voter_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/voter_field_typed_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/website_loaded_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/presentation/bloc/data_entry_bloc.dart';
@@ -25,8 +25,6 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<HomeBloc>(() => HomeBloc(sl(), sl()));
 
   // Data Entry
-  sl.registerLazySingleton<DataEntryRepository>(
-      () => DataEntryRepositoryImplementation());
   sl.registerLazySingleton<InitialDataEntryUseCase>(
       () => InitialDataEntryUseCase());
   sl.registerLazySingleton<WebsiteLoadedDataEntryUseCase>(
@@ -38,13 +36,17 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<NewScrappedDataEntryUseCase>(
       () => NewScrappedDataEntryUseCase());
   sl.registerLazySingleton<AddressSelectedDataEntryUseCase>(
-      () => AddressSelectedDataEntryUseCase(sl()));
+      () => AddressSelectedDataEntryUseCase());
   sl.registerLazySingleton<AddressFieldTypedDataEntryUseCase>(
       () => AddressFieldTypedDataEntryUseCase());
   sl.registerLazySingleton<VoterFieldTypedDataEntryUseCase>(
       () => VoterFieldTypedDataEntryUseCase());
   sl.registerLazySingleton<AddVoterDataEntryUseCase>(
       () => AddVoterDataEntryUseCase());
-  sl.registerFactory<DataEntryBloc>(() =>
-      DataEntryBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+  sl.registerLazySingleton<RemoveVoterDataEntryUseCase>(
+      () => RemoveVoterDataEntryUseCase());
+  sl.registerLazySingleton<SaveVoterDataEntryUseCase>(
+      () => SaveVoterDataEntryUseCase());
+  sl.registerFactory<DataEntryBloc>(() => DataEntryBloc(
+      sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
 }
