@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Color kPrimaryBackgroundColor = const Color(0xFFEFEFF4);
-Color kSecondaryBackgroundColor = Colors.white38;
+Color kSecondaryBackgroundColor = Colors.white54;
 Color kTertiaryBackgroundColor = Colors.white;
 Color kSelectedItemColor = const Color(0xFF0265DC);
 Color kUnSelectedItemColor = const Color(0xFF6D6D6D);

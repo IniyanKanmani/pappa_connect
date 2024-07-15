@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:pappa_connect/core/services/firestore.dart';
+import 'package:pappa_connect/features/data_entry/data/repositories/data_entry_repository_implementation.dart';
+import 'package:pappa_connect/features/data_entry/domain/repositories/data_entry_repository.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/add_voter_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/address_field_typed_data_entry_usecase.dart';
 import 'package:pappa_connect/features/data_entry/domain/usecases/address_selected_data_entry_usecase.dart';
@@ -18,6 +21,9 @@ import 'package:pappa_connect/features/home/presentation/bloc/home_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
+  // Firestore
+  sl.registerLazySingleton<Firestore>(() => Firestore());
+  
   // Home
   sl.registerLazySingleton<InitialHomeUseCase>(() => InitialHomeUseCase());
   sl.registerLazySingleton<ViewChangeHomeUseCase>(
@@ -25,6 +31,8 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<HomeBloc>(() => HomeBloc(sl(), sl()));
 
   // Data Entry
+  sl.registerLazySingleton<DataEntryRepository>(
+      () => DataEntryRepositoryImplementation());
   sl.registerLazySingleton<InitialDataEntryUseCase>(
       () => InitialDataEntryUseCase());
   sl.registerLazySingleton<WebsiteLoadedDataEntryUseCase>(
@@ -46,7 +54,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<RemoveVoterDataEntryUseCase>(
       () => RemoveVoterDataEntryUseCase());
   sl.registerLazySingleton<SaveVoterDataEntryUseCase>(
-      () => SaveVoterDataEntryUseCase());
+      () => SaveVoterDataEntryUseCase(sl()));
   sl.registerFactory<DataEntryBloc>(() => DataEntryBloc(
       sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
 }

@@ -178,8 +178,13 @@ class DataEntryBloc extends Bloc<DataEntryEvent, DataEntryState> {
 
   FutureOr<void> saveDataEvent(
       SaveDataEvent event, Emitter<DataEntryState> emit) async {
-    await _saveVoterDataEntryUseCase();
-    dataEntryData = await _initialDataEntryUseCase();
-    emit(LoadedState(dataEntryData: dataEntryData));
+    // try {
+      await _saveVoterDataEntryUseCase(
+          params: {"data_entry_data": dataEntryData});
+      dataEntryData = await _initialDataEntryUseCase();
+      emit(LoadedState(dataEntryData: dataEntryData));
+    // } catch (e) {
+      // print(e);
+    // }
   }
 }

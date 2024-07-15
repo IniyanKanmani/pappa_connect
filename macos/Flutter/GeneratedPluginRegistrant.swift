@@ -6,6 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import appkit_ui_element_colors
+import cloud_firestore
 import firebase_core
 import geolocator_apple
 import macos_ui
@@ -14,6 +15,7 @@ import path_provider_foundation
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   AppkitUiElementColorsPlugin.register(with: registry.registrar(forPlugin: "AppkitUiElementColorsPlugin"))
+  FLTFirebaseFirestorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseFirestorePlugin"))
   FLTFirebaseCorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseCorePlugin"))
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))
   MacOSUiPlugin.register(with: registry.registrar(forPlugin: "MacOSUiPlugin"))
