@@ -8,15 +8,17 @@ class DataEntryRepositoryImplementation implements DataEntryRepository {
   @override
   Future<void> saveVoterData(Map<String, dynamic> data) async {
     List<Map<String, dynamic>> voters = data['voters'];
-    List<String> voterUUids = [];
+    List<String> voterIds = [];
 
     for (Map<String, dynamic> voter in voters) {
       String id = await _firestore.createDocument(path: "voters", data: voter);
-      voterUUids.add(id);
+      voterIds.add(id);
     }
 
-    Map<String, dynamic> address = data['address'];
-    address["voter_uuids"] = voterUUids;
+    Map<String, dynamic> address = {
+      ...data['address'],
+      "voter_ids": voterIds,
+    };
 
     await _firestore.createDocument(path: "addresses", data: address);
   }
