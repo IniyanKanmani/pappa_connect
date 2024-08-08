@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:pappa_connect/features/data_entry/presentation/views/data_entry_view.dart';
 import 'package:pappa_connect/features/home/presentation/bloc/home_bloc.dart';
+import 'package:pappa_connect/features/search/presentation/views/search_view.dart';
 import 'package:pappa_connect/injection_container.dart';
 
 class HomeView extends StatelessWidget {
@@ -104,7 +105,7 @@ class HomeView extends StatelessWidget {
       tabBuilder: (BuildContext context, int index) {
         return [
           const DataEntryView(),
-          Container(),
+          SearchView(),
           Container(),
         ].elementAt(index);
       },

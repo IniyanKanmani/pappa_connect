@@ -12,4 +12,9 @@ class Firestore {
 
     return document.id;
   }
+
+  Stream<QuerySnapshot> listenToDocumentChanges({required String path}) {
+    CollectionReference collectionRef = firestore.collection(path);
+    return collectionRef.snapshots();
+  }
 }

@@ -7,6 +7,7 @@ Color kTertiaryBackgroundColor = Colors.white;
 Color kSelectedItemColor = const Color(0xFF0265DC);
 Color kUnSelectedItemColor = const Color(0xFF6D6D6D);
 Color kSaveTextColor = const Color(0xFF0F80FF);
+Color kModifyTextColor = const Color(0xFF0F80FF);
 Color kClearTextColor = const Color(0xFFFF473C);
 Color kHintTextColor = const Color(0xFFC4C4C6);
 Color kCheckboxCheckedColor = const Color(0xFF9A3DF1);

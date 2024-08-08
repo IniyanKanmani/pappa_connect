@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:pappa_connect/core/local_database/local_database.dart';
+import 'package:pappa_connect/core/local_database/repository/local_database_repository.dart';
 import 'package:pappa_connect/core/services/firestore.dart';
 import 'package:pappa_connect/features/data_entry/data/repositories/data_entry_repository_implementation.dart';
 import 'package:pappa_connect/features/data_entry/domain/repositories/data_entry_repository.dart';
@@ -17,13 +19,22 @@ import 'package:pappa_connect/features/data_entry/presentation/bloc/data_entry_b
 import 'package:pappa_connect/features/home/domain/usecases/initial_home_usecase.dart';
 import 'package:pappa_connect/features/home/domain/usecases/view_change_home_usecase.dart';
 import 'package:pappa_connect/features/home/presentation/bloc/home_bloc.dart';
+import 'package:pappa_connect/features/search/data/repositories/search_repository_implementation.dart';
+import 'package:pappa_connect/features/search/domain/repositories/search_repository.dart';
+import 'package:pappa_connect/features/search/domain/usecases/initial_search_usecase.dart';
+import 'package:pappa_connect/features/search/presentation/bloc/search_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
+  // Local Database
+  sl.registerLazySingleton<LocalDatabase>(() => LocalDatabase());
+  sl.registerLazySingleton<LocalDatabaseRepository>(
+      () => LocalDatabaseRepository(sl()));
+
   // Firestore
   sl.registerLazySingleton<Firestore>(() => Firestore());
-  
+
   // Home
   sl.registerLazySingleton<InitialHomeUseCase>(() => InitialHomeUseCase());
   sl.registerLazySingleton<ViewChangeHomeUseCase>(
@@ -57,4 +68,10 @@ Future<void> initializeDependencies() async {
       () => SaveVoterDataEntryUseCase(sl()));
   sl.registerFactory<DataEntryBloc>(() => DataEntryBloc(
       sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+
+  // Search
+  sl.registerLazySingleton<SearchRepository>(
+      () => SearchRepositoryImplementation(sl()));
+  sl.registerLazySingleton<InitialSearchUsecase>(() => InitialSearchUsecase(sl()));
+  sl.registerFactory<SearchBloc>(() => SearchBloc(sl()));
 }

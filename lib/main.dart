@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pappa_connect/core/local_database/local_database.dart';
+import 'package:pappa_connect/core/local_database/repository/local_database_repository.dart';
 import 'package:pappa_connect/features/home/presentation/views/home_view.dart';
 import 'package:pappa_connect/firebase_options.dart';
 import 'package:pappa_connect/injection_container.dart';
@@ -12,6 +15,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await Hive.initFlutter();
+  await sl.get<LocalDatabase>().init();
+  sl.get<LocalDatabaseRepository>().fetchData();
 
   runApp(const PappaConnectApp());
 }
